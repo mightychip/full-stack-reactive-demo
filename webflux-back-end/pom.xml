@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.4.0</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>ca.purpleowl.example.reactive</groupId>
+    <artifactId>webflux-back-end</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>webflux-back-end</name>
+    <description>Demo project for Spring Boot</description>
+
+    <properties>
+        <docker.image.prefix>localhost:5000</docker.image.prefix>
+        <java.version>11</java.version>
+    </properties>
+
+    <dependencies>
+        <!-- for health checks, etc. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <!-- database connectivity, reactive style -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>
+        </dependency>
+
+        <!-- webflux for some reactive fun -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+
+        <!-- This just makes working with configuration properties a little easier and cleaner -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- just in case we need to do some debugging -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- sugar -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- test requirements -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.projectreactor</groupId>
+            <artifactId>reactor-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Mongo for testing -->
+        <dependency>
+            <groupId>de.flapdoodle.embed</groupId>
+            <artifactId>de.flapdoodle.embed.mongo</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+    <!-- TODO do something to manage the parent issue so that we don't need to replicate this configuration -->
+    <profiles>
+        <profile>
+            <id>build-and-push-prod-docker-image</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <configuration>
+                            <excludes>
+                                <exclude>
+                                    <groupId>org.springframework.boot</groupId>
+                                    <artifactId>spring-boot-configuration-processor</artifactId>
+                                </exclude>
+                            </excludes>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>com.spotify</groupId>
+                        <artifactId>dockerfile-maven-plugin</artifactId>
+                        <version>1.4.13</version>
+                        <executions>
+                            <execution>
+                                <id>tag-latest</id>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>build</goal>
+                                    <goal>tag</goal>
+                                    <goal>push</goal>
+                                </goals>
+                                <configuration>
+                                    <tag>latest</tag>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>tag-version</id>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>build</goal>
+                                    <goal>tag</goal>
+                                    <goal>push</goal>
+                                </goals>
+                                <configuration>
+                                    <tag>${project.version}</tag>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <repository>${docker.image.prefix}/${project.artifactId}</repository>
+                            <buildArgs>
+                                <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
+                            </buildArgs>
+                        </configuration>
+                        <!-- needed since ~JDK9 to avoid a build error via this plugin -->
+                        <dependencies>
+                            <dependency>
+                                <groupId>javax.activation</groupId>
+                                <artifactId>activation</artifactId>
+                                <version>1.1.1</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+    <repositories>
+        <repository>
+            <name>Maven Central</name>
+            <id>central</id>
+            <url>https://repo1.maven.org/maven2/</url>
+        </repository>
+    </repositories>
+</project>

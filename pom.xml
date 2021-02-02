@@ -7,9 +7,73 @@
     <groupId>ca.purpleowl.examples.reactive</groupId>
     <artifactId>full-stack-reactive-demo</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
 
     <properties>
+        <docker.image.prefix>localhost:5000</docker.image.prefix>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
+
+    <modules>
+        <module>mongo-database</module>
+        <module>react-front-end</module>
+        <module>webflux-back-end</module>
+    </modules>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>com.spotify</groupId>
+                    <artifactId>dockerfile-maven-plugin</artifactId>
+                    <version>1.4.13</version>
+                    <executions>
+                        <execution>
+                            <id>tag-latest</id>
+                            <phase>install</phase>
+                            <goals>
+                                <goal>build</goal>
+                                <goal>tag</goal>
+                                <goal>push</goal>
+                            </goals>
+                            <configuration>
+                                <tag>latest</tag>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>tag-version</id>
+                            <phase>install</phase>
+                            <goals>
+                                <goal>build</goal>
+                                <goal>tag</goal>
+                                <goal>push</goal>
+                            </goals>
+                            <configuration>
+                                <tag>${project.version}</tag>
+                            </configuration>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <repository>${docker.image.prefix}/${project.artifactId}</repository>
+                    </configuration>
+                    <!-- needed since ~JDK9 to avoid a build error via this plugin -->
+                    <dependencies>
+                        <dependency>
+                            <groupId>javax.activation</groupId>
+                            <artifactId>activation</artifactId>
+                            <version>1.1.1</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+    <repositories>
+        <repository>
+            <id>central</id>
+            <url>https://repo1.maven.org/maven2/</url>
+        </repository>
+    </repositories>
 </project>

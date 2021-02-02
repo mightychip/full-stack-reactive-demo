@@ -1,0 +1,5 @@
+# Test configuration stuff
+# FIXME make sure this isn't included in the builds... this should only exist when tests are run
+application:
+  allowed-origins:
+    - "http://allowed-origin.ca"
