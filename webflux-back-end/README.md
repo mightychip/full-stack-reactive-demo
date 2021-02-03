@@ -3,6 +3,9 @@ The back end is built using Spring Boot and WebFlux on a Netty server.  This is 
 
 This serves as a solid example of some basic principles for building a reactive microservice.  The focus of a course using this teaching material should be on the basics of Unit/Integration testing, RouterFunction configuration, and wiring in functional REST endpoints. 
 
+## Prerequisites
+Docker must be installed and a `registry` container must be running on port `5000` in order for the Docker image to successfully pushed.
+
 ## How to Build
 This application is built using the `install` goal, which will automatically run the Unit and Integration Tests (unless specifically disabled).  Provided the `build-and-push-docker-image` Maven profile is active (it is active by default), a Docker image will be built and pushed to the registry at the address specified by the `docker.image.prefix`. The resultant repository will be named `webflux-front-end`.  Both the registry address and repository name can be changed in the configuration for the `docker-maven-plugin
 
@@ -20,6 +23,3 @@ Several simple Unit and Integration Tests are provided to demonstrate testing of
 - [WebSocket Testing](src/test/java/ca/purpleowl/example/reactive/websocket/WebSocketTests.java)
 - [WebFlux Unit Testing](src/test/java/ca/purpleowl/example/reactive/service/GuestBookServiceTests.java)
 - [RouterFunction Integration Testing](src/test/java/ca/purpleowl/example/reactive/route/GuestBookRouteTests.java)
-
-## Teaching Material
-TODO include related Keynote slide deck with relevant speaker notes
