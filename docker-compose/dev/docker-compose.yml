@@ -20,8 +20,8 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - '/Users/jordanheath/Development/Java/Examples/full-stack-reactive-demo/react-front-end:/app'
-      - '/Users/jordanheath/Development/Java/Examples/full-stack-reactive-demo/react-front-end/node_modules:/app/node_modules'
+      - '../../react-front-end:/app'
+      - '../../react-front-end/node_modules:/app/node_modules'
 
   webflux-back-end:
     container_name: webflux-back-end

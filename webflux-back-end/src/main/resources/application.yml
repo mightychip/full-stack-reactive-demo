@@ -7,7 +7,7 @@ server:
   shutdown: graceful
 
 ---
-# Docker-specific configuration - basically just addressing for the dockercompose.yml
+# Docker-specific configuration - basically just addressing for the docker-compose.yml
 spring:
   config:
     activate:

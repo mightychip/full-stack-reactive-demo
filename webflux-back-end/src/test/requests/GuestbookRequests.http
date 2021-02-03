@@ -4,3 +4,13 @@ Origin: http://any-origin.com
 Access-Control-Request-Method: GET
 
 ###
+
+POST http://localhost:8080/guestbook
+Accept: application/json
+Content-Type: application/json
+Origin: http://any-origin.com
+
+{
+  "id": null,
+  "message": "This is a new test message"
+}

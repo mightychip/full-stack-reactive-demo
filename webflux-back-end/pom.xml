@@ -90,9 +90,13 @@
     </build>
 
     <!-- TODO do something to manage the parent issue so that we don't need to replicate this configuration -->
+
     <profiles>
         <profile>
-            <id>build-and-push-prod-docker-image</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <id>build-and-push-docker-image</id>
             <build>
                 <plugins>
                     <plugin>
@@ -138,10 +142,12 @@
                             </execution>
                         </executions>
                         <configuration>
-                            <repository>${docker.image.prefix}/${project.artifactId}</repository>
                             <buildArgs>
                                 <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
                             </buildArgs>
+                            <contextDirectory>${project.basedir}</contextDirectory>
+                            <dockerfile>docker/Dockerfile</dockerfile>
+                            <repository>${docker.image.prefix}/${project.artifactId}</repository>
                         </configuration>
                         <!-- needed since ~JDK9 to avoid a build error via this plugin -->
                         <dependencies>

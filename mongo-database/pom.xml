@@ -14,7 +14,10 @@
 
     <profiles>
         <profile>
-            <id>build-and-push-prod-docker-image</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <id>build-and-push-docker-image</id>
             <build>
                 <plugins>
                     <plugin>

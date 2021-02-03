@@ -13,24 +13,16 @@
     <artifactId>react-front-end</artifactId>
 
     <profiles>
+        <!--
+            This profile builds out our front-end using the supplied dockerfile.  There are other ways that this could
+            be done, but it's wonderful to have everything handled in one pom.xml.  It's possible this will change in
+            a future post.
+         -->
         <profile>
-            <id>build-and-push-prod-docker-image</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>com.spotify</groupId>
-                        <artifactId>dockerfile-maven-plugin</artifactId>
-                        <configuration>
-                            <contextDirectory>${project.basedir}</contextDirectory>
-                            <dockerfile>docker/prod/Dockerfile</dockerfile>
-                            <repository>${docker.image.prefix}/${project.artifactId}</repository>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>build-and-push-dev-docker-image</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <id>build-and-push-docker-image</id>
             <build>
                 <plugins>
                     <plugin>
