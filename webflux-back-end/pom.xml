@@ -150,11 +150,13 @@
                             <repository>${docker.image.prefix}/${project.artifactId}</repository>
                         </configuration>
                         <!-- needed since ~JDK9 to avoid a build error via this plugin -->
+                        <!-- courtesy of: https://github.com/spotify/docker-maven-plugin/issues/427 -->
                         <dependencies>
                             <dependency>
                                 <groupId>javax.activation</groupId>
-                                <artifactId>activation</artifactId>
-                                <version>1.1.1</version>
+                                <artifactId>javax.activation-api</artifactId>
+                                <version>1.2.0</version>
+                                <scope>compile</scope>
                             </dependency>
                         </dependencies>
                     </plugin>
