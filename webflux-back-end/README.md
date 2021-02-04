@@ -17,6 +17,9 @@ There are currently two possible run-configurations for this application:
 
 - **Containerized Mode** - After being built, this application can be easily run in a Docker container.  If it is started using the `docker-compose.yml` file located in the `docker-compose/dev` folder at the root of this project, all required infrastructure including a simple copy of the front-end.
 
+## HTTP Requests
+A series of test HTTP Requests for use in IntelliJ IDEA have been provided [here](src/test/requests/GuestbookRequests.http) to make it easier to manually test the server.
+
 ## Unit/Integration Tests
 Several simple Unit and Integration Tests are provided to demonstrate testing of various WebFlux application components.  In case you're here looking specifically for one of those, they've been indexed below:
 - [CORS Configuration Test](src/test/java/ca/purpleowl/example/reactive/CorsTest.java) - Configuration for this was a bit of a headache to figure out

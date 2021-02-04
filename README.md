@@ -14,7 +14,7 @@ More than anything, this simple application demonstrates some key design feature
 
 ## Getting Started
 You're going to need a few things in order to get started.  All of my demos and teaching materials assume that IntelliJ IDEA (Ultimate where appropriate) is being used.  In addition, you're going to need a few extra things:
-- **MongoDB installed locally** - this is only important if you want to run the back end as a standalone application for easy development
+- **MongoDB installed locally or running in a container** - this is only important if you want to run the back end as a standalone application for easy development
 - **Docker** - this whole stack runs with a `docker-compose.yml` file
 - **A Docker `registry` container listening on port 5000** - this is required by the build process
 - **Node.js** - This project requires **node v15.7.0** at the time of writing
@@ -35,9 +35,9 @@ This application is built to be started in a few configurations:
 ## Further Reading
 Each module contains a more detailed README.md fully explaining what is going on under the hood, testing strategies and any relevant deployment information.  All documentation will continue to be updated with each blog post.
 
-- [WebFlux Back End](webflux-back-end/README.md) - This `README.md` provides a more detailed description of the setup and operations regarding the back end.
-- [React Front End](react-front-end/README.md) - This `README.md` provides a more detailed description of the setup and how to properly communicate with the back end APIs.
-- [MongoDB](mongo-database/README.md) - This `README.md` provides some basic information on the MongoDB setup.  There's really not a lot to see here.
+- [WebFlux Back End](webflux-back-end/README.md) - Setup and operations regarding the back end.
+- [React Front End](react-front-end/README.md) - Setup and how to properly communicate with the back end APIs.
+- [MongoDB](mongo-database/README.md) - Some basic information on the MongoDB setup.  There's really not a lot to see here.
 
 ## Related Blog Post
 The blog post which will be written in relation to this content will be available Soon™.

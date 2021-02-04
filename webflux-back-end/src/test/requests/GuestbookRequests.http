@@ -1,7 +1,12 @@
 GET http://localhost:8080/guestbook
 Accept: application/json
 Origin: http://any-origin.com
-Access-Control-Request-Method: GET
+
+###
+
+GET http://localhost:8080/guestbook/1
+Accept: application/json
+Origin: http://any-origin.com
 
 ###
 
