@@ -1,0 +1,6 @@
+# Test configuration stuff
+application:
+  allowed-origins:
+    - "http://allowed-origin.ca"
+server:
+  shutdown: immediate

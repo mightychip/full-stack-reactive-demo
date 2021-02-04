@@ -1,0 +1,21 @@
+GET http://localhost:8080/guestbook
+Accept: application/json
+Origin: http://any-origin.com
+
+###
+
+GET http://localhost:8080/guestbook/1
+Accept: application/json
+Origin: http://any-origin.com
+
+###
+
+POST http://localhost:8080/guestbook
+Accept: application/json
+Content-Type: application/json
+Origin: http://any-origin.com
+
+{
+  "id": null,
+  "message": "This is a new test message"
+}
