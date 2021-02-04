@@ -26,7 +26,8 @@ This application is built to be started in a few configurations:
     - Start the Spring Boot back end (in the `webflux-back-end` module of this project) - this can be done by either starting the Spring Boot application as a service, or by using the `spring-boot:start` Maven goal
     - Start the React.js front-end (in the `react-front-end` module of this project) by navigating to the module's directory in your command prompt and entering the following commands (in order):
       - `npm install`
-      - `npm run`
+      - `npm start`
+   
 2) **Dockerized for local development** - This mode is great if you just want to get up and running when working on the front end or if you're purely a front end developer and depend on someone else's changes to the back end.  You don't need a Java IDE (although you will still need Maven and Java installed), nor do you need MongoDB installed.  All you need is the Node/React prerequisites, Docker, and an IDE.  In order to use this configuration, run the `docker-compose.yml` file found at `docker-compose/dev` from the root of the project.  This will make the front end available on `localhost:3000` and the back end API available on `localhost:8080`.  The MongoDB instance will also be available at `localhost:27017`.  It's important to make sure those ports are not otherwise occupied or to change the `docker-compose.yml` accordingly.
 
 3) **Dockerized for "Production"** - Coming in the next post.  Typical to my posts, this would be a weak example of productionization.  Especially here, I wouldn't want to risk giving away the "secret sauce" from previous workplaces.

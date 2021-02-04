@@ -22,7 +22,7 @@ import org.springframework.test.web.reactive.server.WebTestClient.ResponseSpec;
  * allowed origin: http://allowed-origin.ca
  */
 @ActiveProfiles("test")
-@SpringBootTest(classes = WebfluxBackEndApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = WebfluxBackEndApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)//, properties = {"classpath:application-test.yml"})
 public class CorsTest {
     private static final String BASE_URL = "http://localhost:%d";
     private static final String BASE_GUESTBOOK_URL = "/guestbook";

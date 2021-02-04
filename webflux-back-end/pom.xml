@@ -3,20 +3,20 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.4.0</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <groupId>ca.purpleowl.examples.reactive</groupId>
+        <artifactId>full-stack-reactive-demo</artifactId>
+        <version>1.0-SNAPSHOT</version>
     </parent>
-    <groupId>ca.purpleowl.example.reactive</groupId>
     <artifactId>webflux-back-end</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>webflux-back-end</name>
-    <description>Demo project for Spring Boot</description>
+    <packaging>jar</packaging>
+
+    <name>WebFlux Back End</name>
+    <description>A Spring Boot WebFlux microservice</description>
 
     <properties>
         <docker.image.prefix>localhost:5000</docker.image.prefix>
         <java.version>11</java.version>
+        <start-class>ca.purpleowl.example.reactive.WebfluxBackEndApplication</start-class>
     </properties>
 
     <dependencies>
@@ -83,13 +83,35 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+            </plugin>
+            <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.springframework.boot</groupId>
+                            <artifactId>spring-boot-configuration-processor</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
             </plugin>
         </plugins>
     </build>
-
-    <!-- TODO do something to manage the parent issue so that we don't need to replicate this configuration -->
 
     <profiles>
         <profile>
@@ -100,47 +122,8 @@
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>org.springframework.boot</groupId>
-                        <artifactId>spring-boot-maven-plugin</artifactId>
-                        <configuration>
-                            <excludes>
-                                <exclude>
-                                    <groupId>org.springframework.boot</groupId>
-                                    <artifactId>spring-boot-configuration-processor</artifactId>
-                                </exclude>
-                            </excludes>
-                        </configuration>
-                    </plugin>
-                    <plugin>
                         <groupId>com.spotify</groupId>
                         <artifactId>dockerfile-maven-plugin</artifactId>
-                        <version>1.4.13</version>
-                        <executions>
-                            <execution>
-                                <id>tag-latest</id>
-                                <phase>install</phase>
-                                <goals>
-                                    <goal>build</goal>
-                                    <goal>tag</goal>
-                                    <goal>push</goal>
-                                </goals>
-                                <configuration>
-                                    <tag>latest</tag>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>tag-version</id>
-                                <phase>install</phase>
-                                <goals>
-                                    <goal>build</goal>
-                                    <goal>tag</goal>
-                                    <goal>push</goal>
-                                </goals>
-                                <configuration>
-                                    <tag>${project.version}</tag>
-                                </configuration>
-                            </execution>
-                        </executions>
                         <configuration>
                             <buildArgs>
                                 <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
@@ -149,16 +132,6 @@
                             <dockerfile>docker/Dockerfile</dockerfile>
                             <repository>${docker.image.prefix}/${project.artifactId}</repository>
                         </configuration>
-                        <!-- needed since ~JDK9 to avoid a build error via this plugin -->
-                        <!-- courtesy of: https://github.com/spotify/docker-maven-plugin/issues/427 -->
-                        <dependencies>
-                            <dependency>
-                                <groupId>javax.activation</groupId>
-                                <artifactId>javax.activation-api</artifactId>
-                                <version>1.2.0</version>
-                                <scope>compile</scope>
-                            </dependency>
-                        </dependencies>
                     </plugin>
                 </plugins>
             </build>
