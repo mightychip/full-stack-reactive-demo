@@ -63,6 +63,33 @@ public class GuestBookServiceTests {
     }
 
     @Test
+    public void failedSaveTest() {
+        // We'll need a different repository for this.  It needs to fail when called.
+        GuestBookRepository mockRepo = Mockito.mock(GuestBookRepository.class);
+        Mockito.when(mockRepo.save(Mockito.any(GuestBookEntry.class)))
+               .thenReturn(Mono.error(new Exception("Fake error")));
+
+        // We should also set this method up in case it gets called... but it shouldn't.
+        Mockito.doNothing().when(mockPublisher).publishEvent(Mockito.any(GuestBookEntryCreatedEvent.class));
+
+        // Create a new GuestBookService which includes our mockRepo.
+        fixture = new GuestBookService(mockRepo, mockPublisher);
+
+        GuestBookEntry entry = new GuestBookEntry(null, "Burn baby, burn!");
+
+        // This call will definitely fail.
+        Mono<GuestBookEntry> result = fixture.create(entry);
+
+        StepVerifier.create(result)
+                    // Verify the failure occurred
+                    .expectError()
+                    .verify();
+
+        // Now make sure the mockPublisher never gets called.
+        Mockito.verify(mockPublisher, Mockito.never()).publishEvent(Mockito.any(GuestBookEntryCreatedEvent.class));
+    }
+
+    @Test
     public void getAllTest() {
         // Let's quickly save a bunch of profiles.
         Flux<GuestBookEntry> savedElements = repository.saveAll(Flux.just(
