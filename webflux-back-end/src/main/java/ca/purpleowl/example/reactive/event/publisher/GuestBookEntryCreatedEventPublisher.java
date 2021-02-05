@@ -25,21 +25,21 @@ import java.util.function.Consumer;
 public class GuestBookEntryCreatedEventPublisher implements Consumer<FluxSink<GuestBookEntryCreatedEvent>>,
                                                             DisposableBean {
 
-    private final AtomicBoolean shuttingDown;
+    private volatile boolean shuttingDown;
     private final BlockingQueue<GuestBookEntryCreatedEvent> queue;
     private final Executor executor;
 
     public GuestBookEntryCreatedEventPublisher(Executor executor) {
         this.executor = executor;
         this.queue = new LinkedBlockingQueue<>();
-        shuttingDown = new AtomicBoolean(false);
+        this.shuttingDown = false;
     }
 
     @Override
     public void accept(FluxSink<GuestBookEntryCreatedEvent> sink) {
         executor.execute(() -> {
             // This thread will continue until the boolean is set to false
-            while(!shuttingDown.get()) {
+            while(!shuttingDown) {
                 try {
                     GuestBookEntryCreatedEvent event = queue.take();
                     log.debug(String.format("Publishing GuestBookEntryCreatedEvent: [%s]", event.toString()));
@@ -68,6 +68,6 @@ public class GuestBookEntryCreatedEventPublisher implements Consumer<FluxSink<Gu
      */
     @Override
     public void destroy() {
-        this.shuttingDown.set(true);
+        this.shuttingDown = true;
     }
 }
