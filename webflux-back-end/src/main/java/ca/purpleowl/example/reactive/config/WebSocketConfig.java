@@ -39,9 +39,11 @@ public class WebSocketConfig {
         // same updates.  There are some cases where this kind of behaviour can be desirable, but not here.
         Flux<GuestBookEntryCreatedEvent> broadcaster = Flux.create(publisher).share();
 
-        // TODO add a description of what's happening here
+        // Now we need to build our WebSocket session.
         return session -> {
+            // Using our broadcaster, for every event that it emits...
             Flux<WebSocketMessage> messageFlux = broadcaster
+                    // ...we want to take that event and marshall it into a JSON string.
                     .map(event -> {
                         try {
                             return objectMapper.writeValueAsString(event.getSource());
@@ -49,11 +51,13 @@ public class WebSocketConfig {
                             throw new RuntimeException(e);
                         }
                     })
+                    // Next, we'll log that JSON, then send it to the client over the WebSocket session.
                     .map(json -> {
                         log.info(String.format("Sending [%s]", json));
                         return session.textMessage(json);
                     });
 
+            // These messages will continue to be sent until the session is closed.
             return session.send(messageFlux);
         };
     }
@@ -65,7 +69,7 @@ public class WebSocketConfig {
             // configuration... there's likely a more elegant way to do this.
             {
                 setUrlMap(Collections.singletonMap("/ws/guestbook", handler));
-                setOrder(10); // TODO so what does this do??
+                setOrder(10);
             }
         };
     }
