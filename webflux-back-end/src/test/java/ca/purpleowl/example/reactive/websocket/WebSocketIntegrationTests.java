@@ -25,14 +25,14 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 @Log4j2
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class WebSocketTests {
+public class WebSocketIntegrationTests {
 
     private static final String GUESTBOOK_ENDPOINT_URL = "http://localhost:%d/guestbook";
     private static final String GUESTBOOK_WEBSOCKET_URL = "ws://localhost:%d/ws/guestbook";
 
     private final int port;
 
-    public WebSocketTests(@LocalServerPort int port) {
+    public WebSocketIntegrationTests(@LocalServerPort int port) {
         this.port = port;
     }
 

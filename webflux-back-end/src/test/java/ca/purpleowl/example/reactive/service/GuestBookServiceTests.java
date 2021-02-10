@@ -7,10 +7,10 @@ import ca.purpleowl.example.reactive.event.GuestBookEntryCreatedEvent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.util.StringUtils;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.ApplicationEventPublisher;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -29,7 +29,7 @@ public class GuestBookServiceTests {
     @Autowired
     private GuestBookRepository repository;
 
-    @MockBean
+    @Mock
     private ApplicationEventPublisher mockPublisher;
 
     private GuestBookService fixture;
