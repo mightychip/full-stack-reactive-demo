@@ -7,10 +7,10 @@ import ca.purpleowl.example.reactive.event.GuestBookEntryCreatedEvent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.util.StringUtils;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.ApplicationEventPublisher;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -29,7 +29,7 @@ public class GuestBookServiceTests {
     @Autowired
     private GuestBookRepository repository;
 
-    @MockBean
+    @Mock
     private ApplicationEventPublisher mockPublisher;
 
     private GuestBookService fixture;
@@ -60,6 +60,33 @@ public class GuestBookServiceTests {
         // Now that we've verified the chain of operations is complete, we can check to see if our Publisher was called
         // during the course of operations. It should have been called exactly once.
         Mockito.verify(mockPublisher, Mockito.times(1)).publishEvent(Mockito.any(GuestBookEntryCreatedEvent.class));
+    }
+
+    @Test
+    public void failedSaveTest() {
+        // We'll need a different repository for this.  It needs to fail when called.
+        GuestBookRepository mockRepo = Mockito.mock(GuestBookRepository.class);
+        Mockito.when(mockRepo.save(Mockito.any(GuestBookEntry.class)))
+               .thenReturn(Mono.error(new Exception("Fake error")));
+
+        // We should also set this method up in case it gets called... but it shouldn't.
+        Mockito.doNothing().when(mockPublisher).publishEvent(Mockito.any(GuestBookEntryCreatedEvent.class));
+
+        // Create a new GuestBookService which includes our mockRepo.
+        fixture = new GuestBookService(mockRepo, mockPublisher);
+
+        GuestBookEntry entry = new GuestBookEntry(null, "Burn baby, burn!");
+
+        // This call will definitely fail.
+        Mono<GuestBookEntry> result = fixture.create(entry);
+
+        StepVerifier.create(result)
+                    // Verify the failure occurred
+                    .expectError()
+                    .verify();
+
+        // Now make sure the mockPublisher never gets called.
+        Mockito.verify(mockPublisher, Mockito.never()).publishEvent(Mockito.any(GuestBookEntryCreatedEvent.class));
     }
 
     @Test

@@ -35,7 +35,7 @@ import reactor.core.publisher.Mono;
             CorsConfigurationProperties.class
         })
 @WebFluxTest
-public class GuestBookRouteTests {
+public class GuestBookRouteIntegrationTests {
 
     private static final String GUESTBOOK_URI = "/guestbook";
 
