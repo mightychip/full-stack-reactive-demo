@@ -42,18 +42,10 @@ public class GuestBookRouteIntegrationTests {
     @MockBean
     private GuestBookRepository mockRepo;
 
-    @Autowired
-    private GuestBookRouteConfig routeConfig;
+    private final WebTestClient client;
 
     @Autowired
-    private GuestBookHandler guestBookHandler;
-
-    private WebTestClient client;
-
-    @BeforeEach
-    public void init() {
-        // Since we bind this to the router function, we have to do a little bit of additional setup by passing in the
-        // Handler.
+    public GuestBookRouteIntegrationTests(GuestBookRouteConfig routeConfig, GuestBookHandler guestBookHandler) {
         this.client = WebTestClient.bindToRouterFunction(routeConfig.guestbookRoutes(guestBookHandler)).build();
     }
 
