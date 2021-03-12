@@ -85,14 +85,14 @@ public class WebSocketIntegrationTests {
     }
 
     private Publisher<GuestBookEntry> postToGuestBookEndpoint(GuestBookEntry entry) {
-        // This utilizes the webclient to make a POST call against the GuestBook endpoint and
+        // This utilizes the webclient to make a POST call against the GuestBook endpoint
         return webClient.post()
-                .uri(String.format(GUESTBOOK_ENDPOINT_URL, port))
-                .body(BodyInserters.fromValue(entry))
-                .retrieve()
-                .bodyToMono(String.class)
-                .log()
-                .thenReturn(entry);
+                        .uri(String.format(GUESTBOOK_ENDPOINT_URL, port))
+                        .body(BodyInserters.fromValue(entry))
+                        .retrieve()
+                        .bodyToMono(String.class)
+                        .log()
+                        .thenReturn(entry);
     }
 
     private GuestBookEntry generateRandomEntry() {

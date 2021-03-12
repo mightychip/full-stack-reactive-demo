@@ -28,17 +28,19 @@ public class CorsTest {
     private static final String BASE_GUESTBOOK_URL = "/guestbook";
     private static final String CORS_ORIGIN = "http://any-origin.com";
 
-    private WebTestClient client;
+    private WebTestClient client = null;
 
     @LocalServerPort
     private int port;
 
     @BeforeEach
     public void init() {
-        client = WebTestClient.bindToServer()
-                .baseUrl(String.format(BASE_URL, port))
-                .defaultHeader("Origin", CORS_ORIGIN)
-                .build();
+        if(client == null) {
+            client = WebTestClient.bindToServer()
+                    .baseUrl(String.format(BASE_URL, port))
+                    .defaultHeader("Origin", CORS_ORIGIN)
+                    .build();
+        }
     }
 
     @Test
